@@ -9,36 +9,38 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 
-type Data = {
-  colours: string[] | undefined
-}
+export type Colour = {
+  hex_code: string,
+  colour_name: string
+}[]
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<Colour[] | undefined>
 ) {
   if(req.method === 'POST') {
     const query:string = req.body.query
     if(!query || query.trim() === '') {  
       res.status(400).json({ error: 'Query is required'})
     }
-    const colours = await getCompletion(query)
-    res.status(200).json({ colours })
+    const results = await getCompletion(query)
+    res.status(200).json(results)
   }
 
 }
 
 
-async function getCompletion(query:string):Promise<string[] | undefined> {
+async function getCompletion(query:string):Promise<Colour[] | undefined> {
   try{
     const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [
-        {"role": "system", "content": "You are a web application which helps people to find a colour pallete for their design by describing what they are looking for. The answer to the prompt should be always a javascript string with only and only the colors HEX codes seperated by comma. Don't add any other description or text."},
-        {"role": "user", "content": `Generate a javascript string with HEX codes of colour pallete, speretade by comma for the the following description: ${query}`},
+        {"role": "system", "content": "You are a web application which helps people to find a colour pallete for their design by describing what they are looking for.Don't add any other description or text. The description is enclosed in <query>. The output should be a an array which has a JSON object for each item. Each object has the following fields: hex_code, colour_name."},
+        {"role": "user", "content": `<${query}>`},
       ]
     });
-return completion.data.choices[0].message?.content?.split(',');
+   const data  = JSON.parse(completion.data.choices[0].message?.content || '');
+    return data
   }catch(error){
     console.error(error.message)
   }
