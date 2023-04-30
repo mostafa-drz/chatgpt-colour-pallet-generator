@@ -1,7 +1,17 @@
 {
-  "name": "colour-pallet-ai",
+  "name": "chatgpt-colour-pallet-generator",
   "version": "0.1.0",
   "private": true,
+  "author": "Mostafa Darehzereshki",
+  "description": "A chatbot that generates colour pallets based on a given description by the user.",
+  "keywords": [
+    "chatbot",
+    "gpt3",
+    "openai",
+    "nextjs",
+    "tailwindcss",
+    "typescript"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
