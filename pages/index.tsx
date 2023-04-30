@@ -33,20 +33,21 @@ export default function Home() {
   }
   return (
     <main className='h-screen w-screen '>
-      <div className='h-full p-10 flex flex-col'>
+      <div className='p-2 h-full md:p-10 flex flex-col'>
       <form onSubmit={handleSubmit} className='flex justify-center items-center flex-col w-full'>
+        <p className='text-lg text-white mb-4'>Describe the colour pallet</p>
       <SearchInput value={query} onChange={handleQueryChange}/>
       <button className='bg-white text-black px-6 py-2 border-0 rounded-sm mt-2' type='submit'>Search</button>
       </form>
-      <div className='flex w-full flex-col h-full flex-wrap p-10'>
+      <div className='flex w-full flex-col h-full flex-wrap p-2 md:p-10'>
         {
           results.map((result:Colour,index) => { 
             return(
               <div style={{backgroundColor:`${result.hex_code}`}} className='w-full  rounded-md border-white border-2 flex-1 mt-2 relative'  key={index+result.colour_name}>
-                <div className='absolute top-0 left-0 bg-gray-500 w-40 h-full opacity-50 z-0'/>
+                <div className='absolute top-0 left-0 bg-gray-500 w-1/3 md:w-28 h-full opacity-50 z-0'/>
                 <CopyToClipboard text={result.hex_code}>
                   <button style={{color:"#fff"}} className=' absolute top-0 left-0 z-10 rounded-md text-center p-2 flex flex-col'>
-                    <span>{result.hex_code}</span>
+                    <span className='text-md'>{result.hex_code}</span>
                     <span className='text-sm'>{result.colour_name}</span>
                     </button>
                   </CopyToClipboard>
